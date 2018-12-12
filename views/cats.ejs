@@ -1,0 +1,29 @@
+<% include partials/header %>
+
+  <div class="container">
+    <header class="jumbotron">
+      <div class="container">
+        <h1>Welcome to Cat Show</h1>
+        <p>These are the good cats</p>
+        <a class="btn btn-primary btn-large" href="/cats/new">Add Cat</a>
+      </div>
+    </header>
+
+    <div class="row text-center" style="display: flex; flex-wrap: wrap">
+      <% cats.forEach((cat) => { %>
+        <div class="col-md-3 col-sm-6">
+          <div class="thumbnail">
+            <img src="<%= cat.image %>" alt="<%= cat.name %>">
+            <div class="caption">
+              <h4><%= cat.name %></h4>
+            </div>
+            <p>
+              <a href="/cats/<%= cat._id %>" class="btn btn-primary">More Info</a>
+            </p>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+
+<% include partials/footer %>

@@ -1,0 +1,25 @@
+{
+  "name": "cat-show",
+  "version": "1.0.0",
+  "description": "A simple cat show app with Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linh4/cat-show.git"
+  },
+  "author": "Linh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/linh4/cat-show/issues"
+  },
+  "homepage": "https://github.com/linh4/cat-show#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "mongoose": "^5.3.16"
+  }
+}
