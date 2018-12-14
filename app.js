@@ -1,61 +1,88 @@
 const express     = require('express'),
       app         = express(),
       bodyParser  = require('body-parser'),
-      mongoose    = require('mongoose');
+      mongoose    = require('mongoose'),
+      Home        = require('./models/home'),
+      Comment     = require('./models/comment')
+      seedDB      = require('./seeds')
 
-mongoose.connect("mongodb://localhost:27017/cats", { useNewUrlParser: true })
+mongoose.connect("mongodb://localhost:27017/homes", { useNewUrlParser: true })
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
-
-let catSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String
-})
-
-let Cat = mongoose.model("Cat", catSchema)
+app.use(express.static(__dirname + "/public"));
+seedDB()
 
 app.get('/', (req, res) => {
   res.render('homepage');
 });
 
-app.get('/cats', (req, res) => {
-  Cat.find({}, (err, allCats) => {
+app.get('/homes', (req, res) => {
+  Home.find({}, (err, allHomes) => {
     if (err) {
       console.log(err)
     } else {
-      res.render('cats', {cats: allCats});
+      res.render('homes/home', {homes: allHomes});
     }
   })
 });
 
-app.post('/cats', (req, res) => {
+app.post('/homes', (req, res) => {
   let name = req.body.name
   let image = req.body.image
   let description = req.body.description
-  let newCat = {name: name, image: image, description: description}
-  Cat.create(newCat, (err, newlyCreatedCat) => {
+  let newHome = {name: name, image: image, description: description}
+  Home.create(newHome, (err, newlyCreatedHome) => {
     if (err) {
       console.log(err)
     } else {
-      res.redirect('/cats');
+      res.redirect('/homes');
     }
   })
 });
 
-app.get('/cats/new', (req, res) => {
-  res.render('new');
+app.get('/homes/new', (req, res) => {
+  res.render('homes/new');
 });
 
-app.get('/cats/:id', (req, res) => {
-  Cat.findById(req.params.id, (err, foundCat) => {
+app.get('/homes/:id', (req, res) => {
+  Home.findById(req.params.id).populate('comments').exec((err, foundHome) => {
     if (err) {
       console.log(err)
     } else {
-      res.render('show', {cat: foundCat});
+      console.log(foundHome)
+      res.render('homes/show', {home: foundHome});
     }
   })
 });
+
+app.get('/homes/:id/comments/new', (req, res) => {
+  Home.findById(req.params.id, (err, foundHome) => {
+    if (err) {
+      console.log(err)
+    } else {
+      res.render('comments/new', {home: foundHome});
+    }
+  })
+});
+
+app.post('/homes/:id/comments', (req, res) => {
+  Home.findById(req.params.id, (err, home) => {
+    if (err) {
+      console.log(err)
+      res.redirect('/homes');
+    } else {
+      Comment.create(req.body.comment, (err, comment) => {
+        if (err) {
+          console.log(err)
+        } else {
+          home.comments.push(comment)
+          home.save()
+          res.redirect('/homes/' + home._id);
+        }
+      })
+    }
+  })
+})
 
 app.listen('3000', () => {
   console.log('server starting...')

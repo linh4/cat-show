@@ -1,0 +1,29 @@
+<% include ../partials/header %>
+
+  <div class="container">
+    <header class="jumbotron">
+      <div class="container">
+        <h1>Welcome to HomeSweetHome!</h1>
+        <p>These are the good places to stay</p>
+        <a class="btn btn-primary btn-large" href="/homes/new">Add Home</a>
+      </div>
+    </header>
+
+    <div class="row text-center" style="display: flex; flex-wrap: wrap">
+      <% homes.forEach((home) => { %>
+        <div class="col-md-3 col-sm-6">
+          <div class="thumbnail">
+            <img src="<%= home.image %>" alt="<%= home.name %>">
+            <div class="caption">
+              <h4><%= home.name %></h4>
+            </div>
+            <p>
+              <a href="/homes/<%= home._id %>" class="btn btn-primary">More Info</a>
+            </p>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+
+<% include ../partials/footer %>

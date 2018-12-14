@@ -1,0 +1,42 @@
+<% include ../partials/header %>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <p class="lead">HomeSweetHome</p>
+        <div class="list-group">
+          <li class="list-group-item active">Info 1</li>
+          <li class="list-group-item">Info 2</li>
+          <li class="list-group-item">Info 3</li>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <div class="thumbnail">
+          <img class="img-responsive" src="<%= home.image %>" alt="<%= home.name %>">
+          <div class="caption-full">
+            <h4 class="pull-right">$50.00/night</h4>
+            <h4><a><%= home.name %></a></h4>
+            <p><%= home.description %></p>
+          </div>
+        </div>
+        <div class="well">
+          <div class="text-right">
+              <a class="btn btn-success" href="/homes/<%= home._id %>/comments/new">Add new comment</a>
+          </div>
+          <hr>
+          <% home.comments.forEach((comment) => { %>
+            <div class="row">
+              <div class="col-md-12">
+                <strong><%= comment.author %></strong>
+                <span class="pull-right">10 days ago</span>
+                <p><%= comment.text %></p>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+        <a class="btn btn-primary" href="/homes">Back</a>
+      </div>
+    </div>
+  </div>
+
+<% include ../partials/footer %>
