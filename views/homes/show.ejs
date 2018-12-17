@@ -14,10 +14,16 @@
         <div class="thumbnail">
           <img class="img-responsive" src="<%= home.image %>" alt="<%= home.name %>">
           <div class="caption-full">
-            <h4 class="pull-right">$50.00/night</h4>
+            <h4 class="pull-right">$<%= home.price %>/night</h4>
             <h4><a><%= home.name %></a></h4>
             <p><%= home.description %></p>
             <p><em>Submitted By <%= home.author.username %></em></p>
+            <% if (currentUser && home.author.id.equals(currentUser._id)) { %>
+              <a class="btn btn-xs btn-warning" href="/homes/<%= home._id %>/edit">Edit</a>
+              <form class="delete-form" action="/homes/<%= home._id %>?_method=DELETE" method="POST">
+                <button class="btn btn-xs btn-danger">Delete</button>
+              </form>
+            <% } %>
           </div>
         </div>
         <div class="well">
@@ -31,6 +37,12 @@
                 <strong><%= comment.author.username %></strong>
                 <span class="pull-right">10 days ago</span>
                 <p><%= comment.text %></p>
+                <% if (currentUser && comment.author.id.equals(currentUser._id)) { %>
+                  <a class="btn btn-xs btn-warning" href="/homes/<%= home._id %>/comments/<%= comment._id %>/edit">Edit</a>
+                  <form class="delete-form" action="/homes/<%= home._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-xs btn-danger">Delete</button>
+                  </form>
+                <% } %>
               </div>
             </div>
           <% }) %>

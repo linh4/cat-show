@@ -10,20 +10,22 @@ router.get('/', (req, res) => {
 // AUTH ROUTES
 
 router.get('/register', (req, res) => {
-  res.render('register');
+  res.render('register', {page: 'register'});
 });
 
-router.post('/register', (req, res) => {
-  const newUser = new User({username: req.body.username})
-  User.register(newUser, req.body.password, (err, user) => {
-    if (err) {
-      console.log(err)
-      return res.render('/register');
-    }
-    passport.authenticate('local')(req, res, () => {
-      res.redirect('/homes');
-    })
-  })
+//handle sign up logic
+router.post("/register", function(req, res){
+    var newUser = new User({username: req.body.username});
+    User.register(newUser, req.body.password, function(err, user){
+        if(err){
+            console.log(err);
+            return res.render("register", {error: err.message});
+        }
+        passport.authenticate("local")(req, res, function(){
+           req.flash("success", "Successfully Signed Up! Nice to meet you " + req.body.username);
+           res.redirect("/homes");
+        });
+    });
 });
 
 router.post('/login', passport.authenticate('local', {
@@ -33,20 +35,14 @@ router.post('/login', passport.authenticate('local', {
 });
 
 router.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', {message: req.flash("error"), page: 'login'});
 });
 
 router.get('/logout', (req, res) => {
   req.logout()
+  req.flash("success", "LOGGED YOU OUT!")
   res.redirect('/homes');
 });
-
-const isLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next()
-  }
-  res.redirect('/login');
-}
 
 
 module.exports = router;
