@@ -1,3 +1,3 @@
 # cat-show
 
-A simple cat show app with Node.js
+A simple home show app with Node.js
